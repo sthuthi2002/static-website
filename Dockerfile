@@ -1,6 +1,8 @@
 FROM ubuntu:latest
-RUN apt-get update -y && apt-get install -y apache2 libapache2-mod-php php
-RUN rm -f /var/www/html/index.html
-COPY . /var/www/html
+ARG DEBIAN_FRONTEND=noninteractive
+#RUN sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu\//https:\/\/archive.ubuntu.com\/ubuntu\//g' /etc/apt/sources.list
+#RUN sed -i 's/http:\/\/archive.ubuntu.com\//http:\/\/us.archive.ubuntu.com\//g' /etc/apt/sources.list
+RUN apt-get update -y && apt-get install -y apache2
+ADD . /var/www/html/
 EXPOSE 80
-CMD ["apache2ctl", "-D", "FOREGROUND"]
+ENTRYPOINT apachectl -D FOREGROUND
