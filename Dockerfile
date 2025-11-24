@@ -1,8 +1,17 @@
 FROM ubuntu:latest
+
 ARG DEBIAN_FRONTEND=noninteractive
-#RUN sed -i 's/http:\/\/archive.ubuntu.com\/ubuntu\//https:\/\/archive.ubuntu.com\/ubuntu\//g' /etc/apt/sources.list
-#RUN sed -i 's/http:\/\/archive.ubuntu.com\//http:\/\/us.archive.ubuntu.com\//g' /etc/apt/sources.list
-RUN apt-get update -y && apt-get install -y apache2
-ADD . /var/www/html/
+
+# Install Apache
+RUN apt-get update -y && \
+    apt-get install -y apache2 && \
+    apt-get clean
+
+# Copy website files to Apache web root
+COPY . /var/www/html/
+
+# Expose port 80 for HTTP traffic
 EXPOSE 80
-ENTRYPOINT apachectl -D FOREGROUND
+
+# Start Apache in the foreground
+CMD ["apachectl", "-D", "FOREGROUND"]
